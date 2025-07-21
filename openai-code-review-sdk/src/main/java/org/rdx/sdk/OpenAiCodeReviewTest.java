@@ -17,10 +17,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * @ author rdx
@@ -53,9 +50,9 @@ public class OpenAiCodeReviewTest {
                 COMMIT_MESSAGE
         );
 
-        String diffCode =gitCommand.getCodeDiff();
+        List<String> diffCodeList =gitCommand.getCodeDiff();
 
-       // String token = System.getenv("OPENAI_API_TOKEN");;
+        String token = System.getenv("OPENAI_API_TOKEN");;
       /*  if (null == token || token.isEmpty()) {
             throw new RuntimeException("token is null");
         }
@@ -78,15 +75,26 @@ public class OpenAiCodeReviewTest {
 
        // System.out.println("评审代码：" + diffCode.toString());
 
-      /*  //2.Gpt评审
-        String log = codeReview(diffCode.toString());
-        System.out.println("review :" +log);
-        //3.写入日志
-        String url = codeLog(log, token);
-        System.out.println("log url:"+url);
-        //4.消息通知
-        pushMessage(url);*/
+        //2.Gpt评审
+        for(String diffCode : diffCodeList) {
+            String log = codeReview(diffCode);
+
+            System.out.println("review :" + log);
+            //3.写入日志
+            String url = codeLog(log, token);
+            System.out.println("log url:" + url);
+            //4.消息通知
+           // pushMessage(url);
+        }
+
     }
+
+    /**
+     * 将 diff 字符串按文件分割为 List
+     * @param diffString diff 出来的字符串
+     * @return 包含每个文件 diff 内容的 List
+     */
+
 
     private static String codeReview(String diffCode)throws Exception{
         String apiKeySecret = "a7ce6f4ab128d3403ae7bb5e89edc699.33DZiyacos8M4e5d";

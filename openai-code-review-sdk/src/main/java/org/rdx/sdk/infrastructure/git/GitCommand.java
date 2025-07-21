@@ -11,7 +11,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @ author rdx
@@ -44,15 +46,32 @@ private Logger logger = LoggerFactory.getLogger(GitCommand.class);
         this.message = message;
     }
 
-    public String getCodeDiff() throws Exception {
+    public List<String>  getCodeDiff() throws Exception {
         //获取最新提交的hash值
         String hash = getLatestCommitHash();
         System.out.println(hash);
         //通过最新提交的hash值获取代码差异
         String diffCode = getCommitDiff(hash);
-        System.out.println(diffCode);
+        List<String> diffPerFile = splitDiffByFile(diffCode);
+        if(diffPerFile.size()>0) {
+            System.out.println(diffPerFile.get(0));
+        }
+        return diffPerFile;
+    }
 
-        return diffCode;
+    private static List<String> splitDiffByFile(String diffString) {
+        List<String> diffPerFile = new ArrayList<>();
+        if (diffString == null || diffString.isEmpty()) {
+            return diffPerFile;
+        }
+
+        String[] parts = diffString.split("(?=diff --git)");
+        for (String part : parts) {
+            if (!part.isEmpty()) {
+                diffPerFile.add(part.trim());
+            }
+        }
+        return diffPerFile;
     }
 
     private String getCommitDiff(String hash)throws Exception {
