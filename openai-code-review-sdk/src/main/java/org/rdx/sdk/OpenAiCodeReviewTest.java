@@ -143,7 +143,7 @@ public class OpenAiCodeReviewTest {
 
     private static String codeLog(String log,String token)throws Exception{
         Git git =Git.cloneRepository()
-                .setURI("https://github.com/progressrdx/openai-code-review-log.git")
+                .setURI(github_review_log_uri)
                 .setDirectory(new File("repo"))
                 .setCredentialsProvider(new UsernamePasswordCredentialsProvider(token,""))
                 .call();
@@ -168,7 +168,7 @@ public class OpenAiCodeReviewTest {
         }
         System.out.println("All changes pushed to remote repository successfully.");
 
-        return "https://github.com/progressrdx/openai-code-review-log/blob/main/"+dateFolderName+"/"+fileName;
+        return github_review_log_uri + "/blob/main/"+dateFolderName+"/"+fileName;
     }
 
     private static void pushMessage(String logUrl) {
