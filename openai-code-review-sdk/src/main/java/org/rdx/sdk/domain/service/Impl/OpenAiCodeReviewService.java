@@ -11,6 +11,7 @@ import org.rdx.sdk.types.enums.Model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -83,7 +84,7 @@ public class OpenAiCodeReviewService extends AbstractOpenAiCodeReviewService {
     }
 
     @Override
-    protected String getDiff() throws Exception {
+    protected List<String> getDiff() throws Exception {
         return gitCommand.getCodeDiff();
     }
 }

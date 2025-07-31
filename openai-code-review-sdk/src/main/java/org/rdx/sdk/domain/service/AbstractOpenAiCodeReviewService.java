@@ -6,6 +6,8 @@ import org.rdx.sdk.infrastructure.weixin.WeiXin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 /**
  * @ author rdx
  * @ describe :
@@ -28,9 +30,9 @@ public abstract class AbstractOpenAiCodeReviewService implements IOpenAiCodeRevi
     @Override
     public void exec() throws Exception {
         //1.获取代码的修改，diff
-        String diffCode = getDiff();
+        List<String> diffCode = getDiff();
         //2.openai对代码评审
-        String recommend = reviewCode(diffCode);
+        String recommend = reviewCode(diffCode.toString());
         //3.将评审代码写入日志中
         String url = writeLog(recommend);
         //4.发送微信公众号消息
@@ -43,5 +45,5 @@ public abstract class AbstractOpenAiCodeReviewService implements IOpenAiCodeRevi
 
     protected abstract String reviewCode(String diffCode) throws Exception;
 
-    protected abstract String getDiff() throws Exception;
+    protected abstract List<String> getDiff() throws Exception;
 }
